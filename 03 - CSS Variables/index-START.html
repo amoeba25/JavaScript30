@@ -10,22 +10,30 @@
 
   <div class="controls">
     <label for="spacing">Spacing:</label>
-    <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+    <input id="spacing" type="range" name="spacing" min="0" max="200" value="10" data-sizing="px">
 
     <label for="blur">Blur:</label>
-    <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+    <input id="blur" type="range" name="blur" min="0" max="50" value="10" data-sizing="px">
 
     <label for="base">Base Color</label>
     <input id="base" type="color" name="base" value="#ffc600">
   </div>
 
-  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+  <div class="image-container">
+    <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+  </div>
 
   <style>
 
     /*
       misc styles, nothing to do with CSS variables
     */
+
+    :root {
+      --image-blur : 0px;
+      --image-space : 20px;
+      --image-color : #ffc600;
+    }
 
     body {
       text-align: center;
@@ -43,9 +51,40 @@
     input {
       width: 100px;
     }
+
+    .image-container {
+      background-color: var(--image-color);
+      width: 800px;
+      height: 500px;
+      position: absolute;
+      left: 25%;
+    }
+
+    .image-container img {
+      filter: blur(var(--image-blur));
+      transform: translate(var(--image-space), var(--image-space));
+    }
   </style>
 
   <script>
+
+    let root = document.documentElement; 
+    const blur = document.querySelector('#blur');
+    const spacing = document.querySelector('#spacing');
+    const base = document.querySelector('#base')
+
+    blur.addEventListener('mouseup', (e)=> {
+      root.style.setProperty("--image-blur", `${e.target.value}px`)
+    })
+
+    spacing.addEventListener('mouseup', (e)=> {
+      root.style.setProperty("--image-space", `${e.target.value}px`)
+    }); 
+
+    base.addEventListener('input', (e)=> {
+      root.style.setProperty("--image-color", `${e.target.value}`)
+    })
+
   </script>
 
 </body>
