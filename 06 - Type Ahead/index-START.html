@@ -15,8 +15,52 @@
       <li>or a state</li>
     </ul>
   </form>
+
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+async function getCities(){
+  const response = await fetch('https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json')
+  const responseJson = await response.json()
+  return responseJson
+}
+
+async function filterCities(input){
+  const citiesData = await getCities();
+
+  const filteredCities = citiesData.filter(city => {
+    return city.city.includes(input) || city.state.includes(input)
+  })
+  return filteredCities
+}
+
+async function renderFilteredCities(input) {
+  const filteredCities = await filterCities(input); 
+  const suggestions = document.querySelector('.suggestions'); 
+
+  // clear the previous list item
+  suggestions.innerHTML = '';
+
+  filteredCities.forEach(city => {
+    const li = document.createElement('li'); 
+    const span = document.createElement('span');
+    span.classList.add('population');
+
+    li.textContent = `${city.city}, ${city.state}`;
+    span.textContent = `${city.population}`;
+    li.appendChild(span)
+    suggestions.appendChild(li)
+  })
+}
+
+const inputBox = document.querySelector('.search'); 
+
+inputBox.addEventListener('input', async(e)=>{
+  const input = e.target.value;
+  await renderFilteredCities(input); 
+  
+})
+
 
 </script>
 </body>
