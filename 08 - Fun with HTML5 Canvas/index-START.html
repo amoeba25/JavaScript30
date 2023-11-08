@@ -4,17 +4,85 @@
   <meta charset="UTF-8">
   <title>HTML5 Canvas</title>
   <link rel="icon" href="https://fav.farm/🔥" />
+
+  <style>
+    canvas{
+      border:1px solid black;
+    }
+  </style>
+
 </head>
 <body>
-<canvas id="draw" width="800" height="800"></canvas>
+<canvas id="draw"></canvas>
 <script>
+  const canvas = document.getElementById('draw'); 
+  const ctx = canvas.getContext('2d'); 
+
+  // last position
+  let cursor = {
+    x: 0, 
+    y: 0
+  }
+
+  setSize();
+
+  // event listners
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mousedown', setPosition);
+
+  function setPosition(e){
+    cursor.x = e.clientX;
+    cursor.y = e.clientY;
+  }
+
+  function randomColour() {
+    colours = ['red', 'blue', 'green', 'violet', 'indigo', 'yellow', 'orange'];
+
+    return colours[Math.floor(Math.random() * colours.length)]
+  }
+
+  function increasingWidth() {
+
+    let initialWidth = 5;
+    let lineWidth = initialWidth
+    while (lineWidth < 100) {
+      lineWidth += 1
+    }
+    lineWidth = initialWidth
+  }
+
+  function draw(e) {
+
+    //left mouse button to be pressed
+    if(e.buttons !== 1) return;
+
+    //begin
+    ctx.beginPath();
+
+    ctx.lineWidth = Math.floor(Math.random() * (100 - 1 + 1) + 1);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = randomColour()
+
+    ctx.moveTo(cursor.x, cursor.y); //from
+    setPosition(e);
+    ctx.lineTo(cursor.x, cursor.y); //to
+
+    ctx.stroke(); //draw it
+  }
+
+  // setting the canvas size
+  function setSize() {
+    canvas.height = 500;
+    canvas.width =800;
+}
+
+
+
+
 </script>
 
-<style>
-  html, body {
-    margin: 0;
-  }
-</style>
+
 
 </body>
 </html>
